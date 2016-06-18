@@ -23,7 +23,7 @@ $(document).ready(function() {
 			toClear = false;
 			break;
 		case "=":
-			res = evaluate(res);			
+			res = evaluate(res);
 			break;
 		default:
 			throw new Error("wrong button value: " + val);
@@ -44,12 +44,14 @@ $(document).ready(function() {
 			return str;
 		}
 		toClear = true;
+		$display.parent().addClass("evalled");
 		return ans = res;
 	}
 
 	$('.buttonPanel').on('click', 'button', function () {
 		console.log("button", this.value, "clicked");
 		console.log("toClear", toClear);
+		$display.parent().removeClass("evalled");
 
 
 		if(transformativeValues.includes(this.value)) {
