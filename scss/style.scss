@@ -28,7 +28,6 @@ body {
 	flex-direction: column;
 }
 
-
 // REMOVE later
 div {
 	outline: 1px dotted black;
@@ -67,7 +66,6 @@ div {
 		float: left;
 
 		&:nth-child(4n+1) {
-			background: yellow;
 			clear: left;
 		}
 	}
