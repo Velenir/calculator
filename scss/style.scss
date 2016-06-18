@@ -10,7 +10,7 @@ button::-moz-focus-inner {
 
 @font-face {
 	font-family: 'Digital7';
-	src: url('../fonts/digital-7.woff') format('woff');
+	src: url('../fonts/digital7_mono.woff') format('woff');
 }
 
 html {
@@ -75,7 +75,7 @@ div {
 	width: 100%;
 	text-align: right;
 	background-color: bisque;
-	font: 2.4em Digital7;
+	font: 2.4em/1.1 Digital7, monospace;
 	line-height: 1.1;
 	padding-left: 18px;
 }
