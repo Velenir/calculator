@@ -1,4 +1,8 @@
-$body-color: darkgray;
+$body-color: #D46262;
+$calculator-color: #D2C4C4;
+$title-color: #4A6B88;
+$button-color: #D0B0B0;
+$output-color: bisque;
 
 *, *::before, *::after {
 	box-sizing: border-box;
@@ -20,7 +24,7 @@ html {
 body {
 	min-height: 100vh;
 	margin: 0;
-	background-color: #D46262;
+	background-color: $body-color;
 }
 
 .wrapper {
@@ -33,13 +37,8 @@ body {
 	flex-direction: column;
 }
 
-// REMOVE later
-div {
-	outline: 1px dotted black;
-}
-
 .calculator {
-	background-color: #D2C4C4;
+	background-color: $calculator-color;
 	border-radius: 20px;
 	padding: 5px 5px 15px;
 	box-shadow: 0 5px 15px 4px #523434;
@@ -50,7 +49,7 @@ div {
 .title {
 	text-align: center;
 	margin: 10px;
-	color: #4A6B88;
+	color: $title-color;
 }
 
 .display {
@@ -74,7 +73,7 @@ div {
 .output {
 	width: 100%;
 	text-align: right;
-	background-color: bisque;
+	background-color: $output-color;
 	font: 2.4em/1.1 Digital7, monospace;
 	line-height: 1.1;
 	padding-left: 18px;
@@ -90,8 +89,9 @@ div {
 		margin: 3px;
 		font-size: 1.5em;
 		float: left;
-		background-color: #D0B0B0;
+		background-color: $button-color;
 		cursor: pointer;
+		border-radius: 48%;
 
 		&:nth-child(4n+1) {
 			clear: left;
