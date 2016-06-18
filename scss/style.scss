@@ -15,7 +15,7 @@ html {
 body {
 	min-height: 100vh;
 	margin: 0;
-	background-color: $body-color;
+	background-color: #D46262;
 }
 
 .wrapper {
@@ -34,14 +34,17 @@ div {
 }
 
 .calculator {
-	background-color: lighten($body-color, 20%);
+	background-color: #D2C4C4;
 	border-radius: 20px;
 	padding: 5px 5px 15px;
+	box-shadow: 0 5px 15px 4px #523434;
+	border: 12px outset #9C8E8E;
 }
 
 .title {
 	text-align: center;
 	margin: 10px;
+	color: #4A6B88;
 }
 
 .display {
@@ -52,6 +55,7 @@ div {
 	width: 100%;
 	text-align: right;
 	font-size: 1.2em;
+	background-color: bisque;
 }
 
 .buttonPanel {
@@ -64,6 +68,7 @@ div {
 		margin: 3px;
 		font-size: 1.5em;
 		float: left;
+		background-color: #D0B0B0;
 
 		&:nth-child(4n+1) {
 			clear: left;

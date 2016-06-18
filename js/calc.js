@@ -7,16 +7,23 @@ $(document).ready(function() {
 		let res = $display.val();
 		switch (val) {
 		case "AC":
+			// clear output
 			res = "";
 			break;
 		case "CE":
-			res = res.slice(0, -1);
+			// remove Infinity wholesale
+			if(res.endsWith("Infinity")) res = res.slice(0, -"Infinity".length);
+			else res = res.slice(0, -1);
+			// accept resulting output as is, even if directly after "="
+			toClear = false;
 			break;
 		case "Ans":
-			res += ans;
+			// reinstate ans if directly after "=", otherwise append to output
+			res = toClear ? ans : res + ans;
+			toClear = false;
 			break;
 		case "=":
-			res = evaluate(res);
+			res = evaluate(res);			
 			break;
 		default:
 			throw new Error("wrong button value: " + val);
@@ -26,21 +33,32 @@ $(document).ready(function() {
 
 	function evaluate(str) {
 		// don't eval and reassign ans if empty
-		if(str === '') return;
+		if(str === '') return '';
+		let res;
+
+		// if doesn't eval, don't change output
+		try {
+			res = eval(str);
+		} catch (e) {
+			console.log("Error", e);
+			return str;
+		}
 		toClear = true;
-		return ans = eval(str);
+		return ans = res;
 	}
 
-	$('.buttonPanel').on('click', 'button', function (e) {
-		console.log("button", this, "clicked");
-
+	$('.buttonPanel').on('click', 'button', function () {
+		console.log("button", this.value, "clicked");
+		console.log("toClear", toClear);
 
 
 		if(transformativeValues.includes(this.value)) {
+
 			transformOutput(this.value);
 		} else {
-			const newVal = toClear ? this.value : $display.val() + this.value;
-
+			if(toClear) $display.val('');
+			// const newVal = toClear ? this.value : $display.val() + this.value;
+			const newVal = $display.val() + this.value;
 
 			// add new value only if eval is possible or will be possible later
 			try {
@@ -52,11 +70,6 @@ $(document).ready(function() {
 			}
 
 			toClear = false;
-
-			// if(toClear) {
-			// 	$display.val('');
-			// 	toClear = false;
-			// }
 
 			$display.val(newVal);
 		}
