@@ -22,7 +22,8 @@ const src = {
 	jadePartials: 'partials/*jade',
 	js: ['js/pubsub.js', 'js/*.js'],
 	img: 'images/*',
-	audio: 'audio/*'
+	audio: 'audio/*',
+	fonts: 'fonts/*'
 };
 
 const dist = {
@@ -30,11 +31,12 @@ const dist = {
 	css: 'dist/css',
 	js: 'dist/js',
 	img: 'dist/images',
-	audio: 'dist/audio'
+	audio: 'dist/audio',
+	fonts: 'dist/fonts'
 };
 
 // Static Server + watching scss/jade files
-gulp.task('serve', ['sass', 'jade', 'javascript', 'images', 'audio'], function() {
+gulp.task('serve', ['sass', 'jade', 'javascript', 'images', 'audio', 'copy'], function() {
 	browserSync.init({
 		server: {
 			baseDir: dist.base
@@ -52,7 +54,7 @@ gulp.task('clean', function(){
 });
 
 gulp.task('build', function(callback) {
-	runSequence('clean', ['sass', 'jade', 'javascript-pub', 'images', 'audio'], callback);
+	runSequence('clean', ['sass', 'jade', 'javascript-pub', 'images', 'audio', 'copy'], callback);
 });
 
 
@@ -114,6 +116,12 @@ gulp.task('images', function () {
 gulp.task('audio', function () {
 	return gulp.src(src.audio)
 		.pipe(gulp.dest(dist.audio));
+});
+
+// Copy rest
+gulp.task('copy', function () {
+	return gulp.src(src.fonts)
+		.pipe(gulp.dest(dist.fonts));
 });
 
 gulp.task('default', ['serve']);
