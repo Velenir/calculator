@@ -44,6 +44,7 @@ div {
 	padding: 5px 5px 15px;
 	box-shadow: 0 5px 15px 4px #523434;
 	border: 12px outset #9C8E8E;
+	max-width: 318px;
 }
 
 .title {
@@ -58,6 +59,7 @@ div {
 
 	&::before {
 		content: "";
+		font-size: 1.5em;
 		position: absolute;
 		left: 10px;
 		top: 50%;
@@ -72,10 +74,10 @@ div {
 .output {
 	width: 100%;
 	text-align: right;
-	font-size: 1.4em;
-	line-height: 1.1;
 	background-color: bisque;
-	font-family: Digital7;
+	font: 2.4em Digital7;
+	line-height: 1.1;
+	padding-left: 18px;
 }
 
 .buttonPanel {
@@ -89,6 +91,7 @@ div {
 		font-size: 1.5em;
 		float: left;
 		background-color: #D0B0B0;
+		cursor: pointer;
 
 		&:nth-child(4n+1) {
 			clear: left;
