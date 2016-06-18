@@ -45,6 +45,7 @@ $(document).ready(function() {
 		}
 		toClear = true;
 		$display.parent().addClass("evalled");
+		if(String(res).length > 14) res = res.toExponential(4);
 		return ans = res;
 	}
 
@@ -79,5 +80,7 @@ $(document).ready(function() {
 
 			$display.val(newVal);
 		}
+
+		$display[0].scrollLeft = $display[0].scrollWidth;
 	});
 });
