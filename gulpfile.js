@@ -38,7 +38,8 @@ gulp.task('serve', ['sass', 'jade', 'javascript', 'images', 'audio'], function()
 	browserSync.init({
 		server: {
 			baseDir: dist.base
-		}
+		},
+		browser: "chromium-browser"
 	});
 
 	gulp.watch([src.scss, src.scssPartials], ['sass']);
@@ -68,7 +69,7 @@ gulp.task('sass', function() {
 
 // Compile jade into HTML
 gulp.task('jade', function() {
-	// let locals = {title: "Productivity Timer"};
+	let locals = {title: "Calculator"};
 
 	return gulp.src(src.jade)
 		.pipe(jade({ locals }))

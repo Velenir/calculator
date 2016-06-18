@@ -2,3 +2,15 @@ extend partials/layout
 
 block content
 	.wrapper
+		.calculator
+			h4.title FreeCodeCamp Calculator
+			
+			.display
+				input.output(type="text", id="display", value="34-87")
+			
+			.buttonPanel
+				- const values = ["AC", "CE", "%", "/", 7, 8, 9, "*", 4, 5, 6, "-", 1, 2, 3, "+", ".", 0, "Ans", "="]
+				each val in values
+					button(type="button", value=val)= val
+					
+				
