@@ -169,7 +169,7 @@ gulp.task('datauri', function() {
 });
 
 
-// const remoteHost = "https://velenir.github.io/pomodoro-timer/";
+// const remoteHost = "https://velenir.github.io/";
 
 
 gulp.task('repath', function() {
