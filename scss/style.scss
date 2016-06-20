@@ -14,10 +14,7 @@ button::-moz-focus-inner {
 	border: none;
 }
 
-@font-face {
-	font-family: 'Digital7';
-	src: url('../fonts/digital7.woff') format('woff');
-}
+@import "partials/fonts";
 
 html {
 	font-size: 16px;
@@ -76,7 +73,7 @@ body {
 	width: 100%;
 	text-align: right;
 	background-color: $output-color;
-	font: 2.4em/1.1 Digital7, monospace;
+	font: 2.4em/1.1 Digital-7, monospace;
 	line-height: 1.1;
 	padding-left: 18px;
 	min-width: ($button-width + 6) * 4 + 10;

@@ -6,24 +6,24 @@ const sass = require('gulp-sass');
 const autoprefixer = require('gulp-autoprefixer');
 const jade = require('gulp-jade');
 const concat = require('gulp-concat');
-const imagemin = require('gulp-imagemin');
 const sourcemaps = require('gulp-sourcemaps');
-const iife = require("gulp-iife");
-const uglify = require('gulp-uglify');
-const babel = require('gulp-babel');
 const del = require('del');
-const runSequence = require('run-sequence');
 
+
+const fs = require('fs');
+const path = require('path');
+const fontfacegen = require('fontfacegen');
 
 const src = {
 	scss: 'scss/*.scss',
 	scssPartials: 'scss/partials/*.scss',
+	fontsScss: 'scss/partials/fonts.scss',
 	jade: '*.jade',
 	jadePartials: 'partials/*jade',
 	js: ['js/pubsub.js', 'js/*.js'],
 	img: 'images/*',
 	audio: 'audio/*',
-	fonts: 'fonts/*'
+	fonts: 'fonts/'
 };
 
 const dist = {
@@ -36,7 +36,7 @@ const dist = {
 };
 
 // Static Server + watching scss/jade files
-gulp.task('serve', ['sass', 'jade', 'javascript', 'images', 'audio', 'copy'], function() {
+gulp.task('serve', ['sass+clean-font-partial', 'jade', 'javascript'], function() {
 	browserSync.init({
 		server: {
 			baseDir: dist.base
@@ -50,16 +50,12 @@ gulp.task('serve', ['sass', 'jade', 'javascript', 'images', 'audio', 'copy'], fu
 });
 
 gulp.task('clean', function(){
-	return del('dist');
-});
-
-gulp.task('build', function(callback) {
-	runSequence('clean', ['sass', 'jade', 'javascript-pub', 'images', 'audio', 'copy'], callback);
+	return del(dist.base);
 });
 
 
 // Compile sass into CSS
-gulp.task('sass', function() {
+gulp.task('sass', ['fontgen'], function() {
 	return gulp.src(src.scss)
 		.pipe(sourcemaps.init())
 		.pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
@@ -67,6 +63,11 @@ gulp.task('sass', function() {
 		.pipe(sourcemaps.write('../maps'))
 		.pipe(gulp.dest(dist.css))
 		.pipe(browserSync.stream({once: true}));
+});
+
+// Remove temporary scss/partials/fonts.scss
+gulp.task('sass+clean-font-partial', ['sass'], function() {
+	return del(src.fontsScss.replace(/\.scss$/, "*$&"));
 });
 
 // Compile jade into HTML
@@ -90,104 +91,46 @@ gulp.task('javascript', function() {
 });
 
 
-// Make publish-ready
-gulp.task('javascript-pub', function() {
-	const uglifyOptions = {compress: {drop_console: true}};
-
-	return gulp.src(src.js)
-		.pipe(sourcemaps.init())
-		.pipe(concat('bundle.js'))
-		.pipe(babel({ presets: ['es2015'] }))
-		.pipe(iife())
-		.pipe(uglify(uglifyOptions))
-		.pipe(sourcemaps.write('../maps'))
-		.pipe(gulp.dest(dist.js))
-		.pipe(browserSync.stream({once: true}));
-});
-
-// Compress images
-gulp.task('images', function () {
-	return gulp.src(src.img)
-		.pipe(imagemin())
-		.pipe(gulp.dest(dist.img));
-});
-
-// Copy audio
-gulp.task('audio', function () {
-	return gulp.src(src.audio)
-		.pipe(gulp.dest(dist.audio));
-});
-
-// Copy rest
-gulp.task('copy', function () {
-	return gulp.src(src.fonts)
-		.pipe(gulp.dest(dist.fonts));
-});
-
-gulp.task('default', ['serve']);
+// const fontgen = require('gulp-fontgen');
+//
+// gulp.task('fontgen', function() {
+// 	return gulp.src(src.fonts + "*")
+// 		.pipe(fontgen({
+// 			dest: dist.fonts,
+// 			css: src.fontsScss,
+// 			css_fontpath: "../fonts",
+// 			embed: ['woff2'],
+// 			subset: ".0123456789+-*/%InfiNeaty"
+// 		}));
+// });
 
 
-// EXTRAS
-// replace images with dataURI in js files
+// Creates temporary scss/partials/font.scss
+gulp.task('fontgen', function(done) {
+	const fonts  = fs.readdirSync(src.fonts);
 
-const replace = require('gulp-replace');
-const fs = require('fs');
-const mime = require('mime');
+	for (let i = fonts.length - 1; i >= 0; i--) {
+		const font = fonts[i];
+		const extension = path.extname(font);
+		let scss = src.fontsScss;
+		if(fonts.length > 1) scss = scss.replace(/\.scss$/, `.${path.basename(font, extension)}$&`);
 
-
-
-function replaceWithDataURI(fileRegExp) {
-	function base64(fpath) {
-		const absPath = process.cwd() + "/" + fpath.replace(/["']/g, '');
-		console.log("dataURI:", absPath);
-		let fileData;
-		try {
-			fileData = fs.readFileSync(absPath);
-		} catch (e) {
-			console.log("error", e);
-			return fpath;
+		if (extension == '.ttf' || extension == '.otf' || extension == '.woff') {
+			fontfacegen({
+				source: path.join(src.fonts, font),
+				css: scss,
+				dest: dist.fonts,
+				css_fontpath: '../fonts/',
+				embed: ["woff2"],
+				// strips every character except for subset
+				subset: '.0123456789+-*/%InfiNeaty'
+			});
 		}
-		return `"data:${mime.lookup(absPath)};base64,${fileData.toString('base64')}"`;
 	}
 
-	return replace(fileRegExp, base64);
-}
-
-
-function stripConsole() {
-	return replace(/\bconsole.log\(.+\)\s*?(;|\n)/g, '');
-}
-
-
-gulp.task('datauri', function() {
-	return gulp.src(src.js)
-		.pipe(concat('bundle.replacedURI.js'))
-		.pipe(replaceWithDataURI(/(["'])(?:\.*\/)*((?:images|audio)\/[\w\/]+)\.(?:svg|png|jpg|jpeg|gif|mp3|ogg|wav)\1/g))
-		.pipe(stripConsole())
-		.pipe(iife())
-		.pipe(gulp.dest("../pomodoro-misc"));
+	done();
 });
 
 
-// const remoteHost = "https://velenir.github.io/";
 
-
-gulp.task('repath', function() {
-	return gulp.src(src.js)
-		.pipe(concat('bundle.replacedPath.js'))
-		// prepend remote host
-		.pipe(replace(/(["'])(?:\.*\/)*((?:images|audio)\/[-\w\/.]+)\1/g, `"${remoteHost}${remoteHost.endsWith("/") ? "$2" : "/$2"}"`))
-		.pipe(stripConsole())
-		.pipe(iife())
-		.pipe(gulp.dest("../pomodoro-misc"));
-});
-
-
-// publish to gh-pages
-
-const ghPages = require('gulp-gh-pages');
-
-gulp.task('publish', ['build'], function() {
-	return gulp.src('./dist/**/*')
-    .pipe(ghPages());
-});
+gulp.task('default', ['serve']);
