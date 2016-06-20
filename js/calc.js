@@ -71,7 +71,6 @@ $(document).ready(function() {
 
 			// add new value only if eval is possible or will be possible later
 			try {
-				console.log("trying", newVal.endsWith("Infinity") ? newVal : newVal+"0");
 				// don't append "0" to "Infinity" => always throws
 				eval(newVal.endsWith("Infinity") ? newVal : newVal+"0");
 			} catch (e) {
