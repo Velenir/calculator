@@ -3,6 +3,8 @@ $calculator-color: #D2C4C4;
 $title-color: #4A6B88;
 $button-color: #D0B0B0;
 $output-color: bisque;
+$button-width: 60px;
+$button-height: 48px;
 
 *, *::before, *::after {
 	box-sizing: border-box;
@@ -77,6 +79,7 @@ body {
 	font: 2.4em/1.1 Digital7, monospace;
 	line-height: 1.1;
 	padding-left: 18px;
+	min-width: ($button-width + 6) * 4 + 10;
 }
 
 .buttonPanel {
@@ -84,8 +87,8 @@ body {
 	text-align: center;
 
 	> button {
-		width: 2.5em;
-		height: 2em;
+		width: $button-width;
+		height: $button-height;
 		margin: 3px;
 		font-size: 1.5em;
 		float: left;
