@@ -17,11 +17,6 @@ $(document).ready(function() {
 			// accept resulting output as is, even if directly after "="
 			toClear = false;
 			break;
-		// case "Ans":
-		// 	// reinstate ans if directly after "=", otherwise append to output
-		// 	res = toClear ? ans : res + ans;
-		// 	toClear = false;
-		// 	break;
 		case "=":
 			res = evaluate(res);
 			break;
@@ -29,6 +24,13 @@ $(document).ready(function() {
 			throw new Error("wrong button value: " + val);
 		}
 		$display.val(res);
+		// scrolls to right edge;
+		$display[0].scrollLeft = $display[0].scrollWidth;
+		// shorten and use scientific notation if answer alone still makes output scroll
+		if($display[0].scrollLeft > 0) {
+			res = res.toExponential(4);
+			$display.val(ans = res);
+		}
 	}
 
 	function evaluate(str) {
@@ -45,16 +47,17 @@ $(document).ready(function() {
 		}
 		toClear = true;
 		$display.parent().addClass("evalled");
-		if(String(res).length > 14) res = res.toExponential(4);
+
+		// // shorten and use scientific notation if answer alone makes output scroll
+		// if($display[0].scrollLeft > 0) {
+		// 	res = res.toExponential(4);
+		// }
 		return ans = res;
 	}
 
 	$('.buttonPanel').on('click', 'button', function () {
-		console.log("button", this.value, "clicked");
-		console.log("toClear", toClear);
-		console.log("Answer", ans);
-		$display.parent().removeClass("evalled");
 
+		$display.parent().removeClass("evalled");
 
 		if(transformativeValues.includes(this.value)) {
 
@@ -81,6 +84,7 @@ $(document).ready(function() {
 			$display.val(newVal);
 		}
 
+		// move caret to the right end
 		$display[0].scrollLeft = $display[0].scrollWidth;
 	});
 });
