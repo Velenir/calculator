@@ -71,10 +71,12 @@ $(document).ready(function() {
 
 			// add new value only if eval is possible or will be possible later
 			try {
+				// "9//\d*" always evals to 9
+				if(newVal.endsWith("//")) throw new SyntaxError("Double divider //");
 				// don't append "0" to "Infinity" => always throws
 				eval(newVal.endsWith("Infinity") ? newVal : newVal+"0");
 			} catch (e) {
-				console.log("Error", e);
+				console.log("Error", e.message);
 				return;
 			}
 
