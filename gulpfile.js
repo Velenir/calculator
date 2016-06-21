@@ -9,10 +9,8 @@ const concat = require('gulp-concat');
 const sourcemaps = require('gulp-sourcemaps');
 const del = require('del');
 
+const fontgen = require('gulp-fontgen');
 
-const fs = require('fs');
-const path = require('path');
-const fontfacegen = require('fontfacegen');
 
 const src = {
 	scss: 'scss/*.scss',
@@ -91,45 +89,46 @@ gulp.task('javascript', function() {
 });
 
 
-// const fontgen = require('gulp-fontgen');
-//
-// gulp.task('fontgen', function() {
-// 	return gulp.src(src.fonts + "*")
-// 		.pipe(fontgen({
-// 			dest: dist.fonts,
-// 			css: src.fontsScss,
-// 			css_fontpath: "../fonts",
-// 			embed: ['woff2'],
-// 			subset: ".0123456789+-*/%InfiNeaty"
-// 		}));
-// });
 
-
-// Creates temporary scss/partials/font.scss
-gulp.task('fontgen', function(done) {
-	const fonts  = fs.readdirSync(src.fonts);
-
-	for (let i = fonts.length - 1; i >= 0; i--) {
-		const font = fonts[i];
-		const extension = path.extname(font);
-		let scss = src.fontsScss;
-		if(fonts.length > 1) scss = scss.replace(/\.scss$/, `.${path.basename(font, extension)}$&`);
-
-		if (extension == '.ttf' || extension == '.otf' || extension == '.woff') {
-			fontfacegen({
-				source: path.join(src.fonts, font),
-				css: scss,
-				dest: dist.fonts,
-				css_fontpath: '../fonts/',
-				embed: ["woff2"],
-				// strips every character except for subset
-				subset: '.0123456789+-*/%InfiNeaty'
-			});
-		}
-	}
-
-	done();
+// Create temporary scss/partials/font.scss
+gulp.task('fontgen', function() {
+	return gulp.src(src.fonts + "*")
+		.pipe(fontgen({
+			dest: dist.fonts,
+			css: src.fontsScss,
+			css_fontpath: "../fonts",
+			embed: ['woff2'],
+			subset: ".0123456789+-*/%InfiNeaty"
+		}));
 });
+
+
+// Create temporary scss/partials/font.scss
+// gulp.task('fontgen', function(done) {
+// 	const fonts  = fs.readdirSync(src.fonts);
+//
+// 	for (let i = fonts.length - 1; i >= 0; i--) {
+// 		const font = fonts[i];
+// 		const extension = path.extname(font);
+// 		let scss = src.fontsScss;
+// 		// different name if more than 1 font
+// 		if(fonts.length > 1) scss = scss.replace(/\.scss$/, `.${path.basename(font, extension)}$&`);
+//
+// 		if (extension == '.ttf' || extension == '.otf' || extension == '.woff') {
+// 			fontfacegen({
+// 				source: path.join(src.fonts, font),
+// 				css: scss,
+// 				dest: dist.fonts,
+// 				css_fontpath: '../fonts/',
+// 				embed: ["woff2"],
+// 				// strips every character except for subset
+// 				subset: '.0123456789+-*/%InfiNeaty'
+// 			});
+// 		}
+// 	}
+//
+// 	done();
+// });
 
 
 

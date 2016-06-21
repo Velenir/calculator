@@ -9,17 +9,16 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "browser-sync": "^2.12.3",
-    "del": "^2.2.0",
-    "fontfacegen": "^0.2.0",
+    "browser-sync": "^2.13.0",
+    "del": "^2.2.1",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.0",
     "gulp-concat": "^2.6.0",
-    "gulp-fontgen": "^0.1.9",
+    "gulp-fontgen": "^0.2.0",
     "gulp-jade": "^1.1.0",
-    "gulp-sass": "^2.2.0",
+    "gulp-sass": "^2.3.2",
     "gulp-sourcemaps": "^1.6.0",
-    "stylelint": "^6.3.3",
+    "stylelint": "^6.7.0",
     "stylelint-config-standard": "^9.0.0"
   }
 }
