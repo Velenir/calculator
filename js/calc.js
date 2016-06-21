@@ -42,7 +42,7 @@ $(document).ready(function() {
 		try {
 			res = eval(str);
 		} catch (e) {
-			console.log("Error", e);
+			console.log("Error", e.message);
 			return str;
 		}
 		toClear = true;
