@@ -63,7 +63,7 @@ $(document).ready(function() {
 
 			transformOutput(this.value);
 		} else {
-			if(toClear) $display.val('');
+			if(toClear && !"+-*/%".includes(this.value)) $display.val('');
 			// const newVal = toClear ? this.value : $display.val() + this.value;
 			const newVal = $display.val() + (this.value === "Ans" ? ans : this.value);
 
